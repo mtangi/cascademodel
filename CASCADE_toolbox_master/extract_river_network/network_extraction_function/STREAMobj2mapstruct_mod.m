@@ -1,6 +1,6 @@
 function [GS,x,y] = STREAMobj2mapstruct_mod(S,varargin)
 
-%STREAMOBJ2MAPSTRUCT_MOD convert instance of STREAMobj to mapstruct
+% STREAMOBJ2MAPSTRUCT_MOD convert instance of STREAMobj to mapstruct
 % Derived from Topotoolbox 2, modified by M. Tangi & R. J. P. Schmitt, January 2019
 %
 % Syntax
