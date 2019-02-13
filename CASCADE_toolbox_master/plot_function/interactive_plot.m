@@ -96,10 +96,10 @@ man_button = double('2');
 tr_button =  double('3');
 dep_button = double('4');
 ent_button = double ('5');
-list_button = double('s');
+list_button = double('q');
 node_button = double('n');
-dam_button = double('d');
-add_button = double('a');
+dam_button = double('a');
+ext_button = double('z');
 ID_button = double('i');
 
 exit_button = [27 8]; % exitbutton = ESC or Backsapce
@@ -118,7 +118,7 @@ if nargin >= 6 && ~isempty(damdata)
 end
 
 if  nargin >= 7 && ~isempty(extdata)
-    str{length(str)+1} = [ char(add_button) ' : show additional sed fluxes'];
+    str{length(str)+1} = [ char(ext_button) ' : show additional sed fluxes'];
 end
 
 str{length(str)+1} = 'ESC or BS : close figure';
@@ -326,7 +326,7 @@ while ~ any (option_button == exit_button)
        end
 
    %toggle additional flows visibility
-   elseif nargin >= 7 &&  ~isempty(extdata) && option_button == add_button 
+   elseif nargin >= 7 &&  ~isempty(extdata) && option_button == ext_button 
        
        if strcmp(get(main_fig(5),'visible'), 'on')
              set(main_fig(5),'Visible','off')

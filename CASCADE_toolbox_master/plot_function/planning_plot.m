@@ -179,15 +179,15 @@ man_button = double('2');
 tr_button =  double('3');
 dep_button = double('4');
 ent_button = double ('5');
-list_button = double('s');
+list_button = double('q');
 node_button = double('n');
-dam_button = double('d');
-ext_button = double('a');
-ID_ext_button = double('c');
-ID_button = double('z');
-ID_dam_button = double('x');
-changedam_button =  double('q');
-changeext_button = double('w');
+dam_button = double('a');
+ext_button = double('z');
+ID_button = double('i');
+ID_ext_button = double('x');
+ID_dam_button = double('s');
+changedam_button =  double('d');
+changeext_button = double('c');
 
 exit_button = [27 8]; % exitbutton = ESC or Backsapce
 option_button = default_button;
