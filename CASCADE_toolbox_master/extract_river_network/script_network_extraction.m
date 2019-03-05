@@ -15,9 +15,11 @@ clc
 %% add topotoolbox folder path
 addpath(genpath(pwd))
 
-%% DEM input (run this section of DEM is available (in .tif format
+%% DEM input (run this section of DEM is available (in .tif format)
 
-% DEM_name = 'Vjosa_basin_25m.tif' ;
+%put the name of the DEM istead of demname
+
+% DEM_name = 'demname.tif' ;  
 % 
 % DEM = GRIDobj(DEM_name);
 
@@ -56,9 +58,9 @@ mingradient = 0.0001;
 [ReachData,S] = ExtractRiverNetwork(DEM, Amin_km2, reach_length_km, breaknodes, mingradient);
 
 % plot river network
-plot(S);
+% plot(S);
 
 %% export map struct (for visualization and manipulation in GIS softwares)
-shp_name = 'River_Network';
-shapewrite(ReachData,shp_name);
+% shp_name = 'River_Network';
+% shapewrite(ReachData,shp_name);
     

@@ -6,78 +6,100 @@
 % add all folders to matlab path
 addpath(genpath(pwd))
 
-%% Synthetic river network
-
+%% load input ReachData 
 % Load workspace
 % ReachData: struct reporting for each reach of the network the attribute columun variables .
 load('Vjosa_ReachData');
 
-% Graph Preprocessing
+%% Graph Preprocessing
 Network = graph_preprocessing (ReachData);
+
+%% Run CASCADE in interactive mode
 
 %run CASCADE (intercative mode)
 [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network  );
-
-%run CASCADE (default mode)
-%[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'default' );
 
 %run CASCADE (customize mode)
 %[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'additional_sed_flow', additional_sed_flow ,'dams',damdata,'tr_cap_equation', 1, 'hydr_estimation',1 , 'Fi_r', Fi_r);
 
 interactive_plot ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
 
-interactive_plot ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network, damdata , extdata );
+%% Run CASCADE with default mode
 
-%% Vjosa network) Run Cascade with additional input
- 
+% % run CASCADE (default mode)
+%
+%[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'default' );
 
-load('Vjosa_ReachData.mat');
-load('Vjosa_extdata.mat'); 
-load('Vjosa_damdata.mat');
+%% Run CASCADE with customized mode (name-pair value)
 
-Network = graph_preprocessing (ReachData);
+% % run CASCADE (customize mode)
+% % requires Fi_r already extracted for another CASCADE run in default mode
+%
+%[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'additional_sed_flow', additional_sed_flow ,'dams',damdata,'tr_cap_equation', 1, 'hydr_estimation',1 , 'Fi_r', Fi_r);
 
-%find source reaches in ReachData
-sources = find (cellfun(@isempty,Network.Upstream_Node)==1);
- 
-%apply transport limitation
-for i=1:length(ReachData)
-    ReachData(i).tr_limit = 0;
-    if sum(i == sources) ==1
-            ReachData(i).tr_limit = 1;
-    end
-end
 
-% name-pair values mode
-[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'external_sed_flow', extdata ,'dams',damdata','tr_cap_equation', 1, 'hydr_estimation',2 , 'Fi_r', Fi_r);
+%% Run CASCADE with additional input
 
-sediment_management_analysis( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network, damdata , extdata );
+% Uncomment the code in this section to run CASCADE of the Vjosa river,
+% wi the inclusion of dams and additional sediment contributions, and the
+% application of limitations on the sediment entraining; and plot the
+% outputs with the sediment_management_analysis function.
+%
+% % load damdata and extdata
+%
+% load('Vjosa_extdata.mat'); 
+% load('Vjosa_damdata.mat');
+% 
+% % Apply transport limitation to all reaches except the source reaches
+%
+% sources = find (cellfun(@isempty,Network.Upstream_Node)==1); %find source reaches in ReachData
+%
+% for i=1:length(ReachData)
+%     ReachData(i).tr_limit = 0;
+%     if sum(i == sources) ==1
+%             ReachData(i).tr_limit = 1;
+%     end
+% end
+% 
+% % Name-pair values mode
+%
+% [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'external_sed_flow', extdata ,'dams',damdata','tr_cap_equation', 1, 'hydr_estimation',2 , 'Fi_r', Fi_r);
+% 
+% sediment_management_analysis( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network, damdata , extdata );
 
-%% (Vjosa network) Run Cascade for a different water flow scenario 
+%% Run CASCADE for a different water flow scenario 
 
-% Load workspace
-% ReachData: struct reporting for each reach of the network the attribute columun variables .
-ReachData = shaperead('Vjosa_Network');
+% Uncomment the code in this section to run CASCADE of the Vjosa river
+% with a different water flow scenario, and plot the
+% outputs with the interactive_plot function
+% 
+% % water_flow_scenarios contains the matrices to 
+% % - ReachData_percentiles: matrix reporting for each reach the water flow for
+% %   the considered water flow scenarios.
+% % - ReachData_Wac: matrix reporting for each reach the active channel width for
+% %   the considered water flow scenarios.
+% % - Scenario_frequency: annual frequency of each water flow scenario
+%
+% load('water_flow_scenarios_Vjosa.mat');
+% 
+% % Assign new water flow scenario
+%
+% ID_scenario = 9;  %change scenario (column in matrix Vjosa_Q_scenario)
+% Q_s = num2cell(Vjosa_Q_scenario(:,ID_scenario));
+% Wac_s = num2cell(Vjosa_Wac_scenario(:,ID_scenario));
+% 
+% [ReachData.Q ] = Q_s{:};
+% [ReachData.Wac ] = Wac_s{:};
+% 
+% % Graph Preprocessing
+%
+% Network = graph_preprocessing (ReachData);
+% 
+% %run CASCADE
+% 
+% [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network  ,'default' );
+%
+% % Plot outputs
+%
+%interactive_plot ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
 
-% water_flow_scenarios contains the matrices to 
-% - ReachData_percentiles: matrix reporting for each reach the water flow for
-%   the considered water flow scenarios.
-% - ReachData_Wac: matrix reporting for each reach the active channel width for
-%   the considered water flow scenarios.
-% - Scenario_frequency: annual frequency of each water flow scenario
-load('water_flow_scenarios_Vjosa.mat');
-
-%assign new water flow scenario
-ID_scenario = 9;
-Q_s = num2cell(Vjosa_Q_scenario(:,ID_scenario));
-Wac_s = num2cell(Vjosa_Wac_scenario(:,ID_scenario));
-
-[ReachData.Q ] = Q_s{:};
-[ReachData.Wac ] = Wac_s{:};
-
-% Graph Preprocessing
-Network = graph_preprocessing (ReachData);
-
-%run CASCADE
-
-[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network  ,'default' );
