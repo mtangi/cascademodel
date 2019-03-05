@@ -13,7 +13,7 @@ function [dQ] = hydraulic_solver_objective(h)
 %
 %% obtain Q from h
 
-    global kk wac q slp v kst_analytic rho s taucrit d90 
+    global kk kst wac q slp v kst_analytic rho s taucrit d90 
 
     kk = kk+1;
 
@@ -22,7 +22,7 @@ function [dQ] = hydraulic_solver_objective(h)
     d90 = (rho*h*slp)/((s-rho)*taucrit);
 
     %Calculate an initial d90 based on very basic assumptions
-    kst = 40; % generic Strickler value
+    %kst = 40; % generic Strickler value
     Rh = (h*wac)/(2*h+wac); % hydraulic radius
     v = kst*(Rh)^(2/3)*slp^0.5; % flow velocity 
 

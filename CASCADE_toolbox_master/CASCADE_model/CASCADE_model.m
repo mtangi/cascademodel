@@ -200,7 +200,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
 
             case 2 
                 % hydraulic solver
-                hydr_result = hydraulic_solver(Slope, Q , Wac, 0);
+                hydr_result = hydraulic_solver(Slope, Q , Wac, n_Man, 0);
                 h = hydr_result(:, 1);
                 v = hydr_result(:,4);
         end

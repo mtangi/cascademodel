@@ -1,4 +1,4 @@
-function [hydraulicData] = hydraulic_solver(Slope , Q , Wac ,plot)
+function [hydraulicData] = hydraulic_solver(Slope , Q , Wac , n_Man , plot)
 %HYDRAULIC_SOLVER find the hydraulic features of the reach via optimization
 %of the flow depth h, given the water flow and the active channel width
 %   
@@ -27,8 +27,7 @@ function [hydraulicData] = hydraulic_solver(Slope , Q , Wac ,plot)
     global  wac q slp  kst rho s kk taucrit v kst_analytic d90 
 
     rho = 1000; % density, water 
-    s =2600; % relative density, sediment 
-    kst = 35; % Strickler coefficient
+    s = 2600; % relative density, sediment 
 
 %% define options for hydraulic solving procedure
 
@@ -57,9 +56,10 @@ function [hydraulicData] = hydraulic_solver(Slope , Q , Wac ,plot)
         wac = Wac(ii);
         slp = Slope(ii);
         q = Q(ii);
+        kst = 1./n_Man(ii); % Strickler coefficient
 
         %define initial conditions
-        h_init= q.^0.299*slp.^-0.206; % from: 1. Huang HQ, Nanson GC (2002) A stability criterion inherent in laws governing alluvial channel flow. Earth Surface Processes and Landforms 27(9):929�944.: p 939, Tbale II
+        h_init = q.^0.299*slp.^-0.206; % from: 1. Huang HQ, Nanson GC (2002) A stability criterion inherent in laws governing alluvial channel flow. Earth Surface Processes and Landforms 27(9):929�944.: p 939, Tbale II
 
         %solve for h
         kk=1;

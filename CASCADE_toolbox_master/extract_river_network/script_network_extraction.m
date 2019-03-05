@@ -12,9 +12,21 @@
 clear all
 clc
 
-%% main input
-%DEM name
-DEM_name = 'Vjosa_basin_25m.tif' ;
+%% add topotoolbox folder path
+addpath(genpath(pwd))
+
+%% DEM input (run this section of DEM is available (in .tif format
+
+% DEM_name = 'Vjosa_basin_25m.tif' ;
+% 
+% DEM = GRIDobj(DEM_name);
+
+%% Vjosa DEM input 
+% for the Vjosa, the input DEM is alredy defined as a GRIDobj
+
+load('Vjosa_DEM_GRIDobj.mat')
+
+%% user-defined input data for network extraction
 
 %Minimum drainage area in km2. Large drainage areas cause the river 
 %network to consider only larger streams, small drainage areas increase 
@@ -28,21 +40,17 @@ mingradient = 0.0001;
 % values to obtain partitions only at confluences or if manual partition is desired.
 
 %if uniform partitioning
-reach_length_km = 100; 
-breaknodes = [];
+
+% reach_length_km = 100; 
+% breaknodes = [];
 
 %if manual partitioning (break points and/or dams)
+
  reach_length_km = 200000; 
  load('Vjosa_breaknodes.mat');
 
 %breakpoint matrix must contain a single matrix (Nx2) of x and y coordinates of N break points of
 %the network, with the same reference system of the DEM, found using GIS software
-
-%% add topotoolbox folder path
-addpath(genpath(pwd))
-
-%% preprocessing
-DEM = GRIDobj(DEM_name);
 
 %% River network extraction
 [ReachData,S] = ExtractRiverNetwork(DEM, Amin_km2, reach_length_km, breaknodes, mingradient);

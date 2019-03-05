@@ -6,7 +6,7 @@
 % add all folders to matlab path
 addpath(genpath(pwd))
 
-%% (Vjosa network) Run CASCADE with no dams or ext data
+%% Synthetic river network
 
 % Load workspace
 % ReachData: struct reporting for each reach of the network the attribute columun variables .
@@ -26,7 +26,10 @@ Network = graph_preprocessing (ReachData);
 
 interactive_plot ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
 
-%% (Vjosa network) Run Cascade with additional input
+interactive_plot ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network, damdata , extdata );
+
+%% Vjosa network) Run Cascade with additional input
+ 
 
 load('Vjosa_ReachData.mat');
 load('Vjosa_extdata.mat'); 
@@ -46,11 +49,9 @@ for i=1:length(ReachData)
 end
 
 % name-pair values mode
-[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'external_sed_flow', extdata ,'dams',damdata','tr_cap_equation', 1, 'hydr_estimation',2);
+[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'external_sed_flow', extdata ,'dams',damdata','tr_cap_equation', 1, 'hydr_estimation',2 , 'Fi_r', Fi_r);
 
-interactive_plot ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network, damdata , extdata );
-
-planning_plot (ReachData ,Network, damdata , extdata );
+sediment_management_analysis( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network, damdata , extdata );
 
 %% (Vjosa network) Run Cascade for a different water flow scenario 
 
