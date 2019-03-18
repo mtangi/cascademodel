@@ -231,8 +231,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
 
     %% Routing scheme
     
-    for i=1:length(NH)
-        n = NH(i);
+    for n = NH
         
         if any(n == sources) %check if the node is a source node
             
