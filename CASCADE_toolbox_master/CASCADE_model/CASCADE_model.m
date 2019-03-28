@@ -3,15 +3,15 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
 %
 % INPUT :
 %
-% ReachData        = Struct defining the features of the network reaches
+% ReachData      = Struct defining the features of the network reaches
 % Network        = 1x1 struct containing for each node info on upstream and downstream nodes
 %
 % Optional input :
 %
 % 'default'      = set transport capacity equation to Wilcock and Crowe, do not open the dialog window
 % 'damdata'      = (M x N+1) matrix containing for each dam in the network the node ID and the trapping efficiency for the N sediment classes
-% 'additional_sed_flows = (Px3) vector containing., for the P additional sediment flows, the 1) input reach ID; 2) sediment load [Kg/s], 3) D50 of the load;
-%  Fi_r           = NxC matrix reporting the grain size frequency of the N reaches for the C sediment classes.
+% 'extdata'      = (Px5) vector containing., for the P external sediment flows, the 1) input reach ID; 2) sediment flux delivered [Kg/s], 3-5) D16, D50 and D84 of the input flow;
+%  Fi_r          = NxC matrix reporting the grain size frequency of the N reaches for the C sediment classes.
 %
 %----
 % OUTPUT: 
@@ -28,8 +28,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
 % QB_tr          = it is a NxN matrix. It reports the total flows transported by each node, subdivided per
 %                  incoming CASCADE. Total flux is given summing up the sub-cascades.
 %
-% QB_dep         = it is structured as QB_tr, but it reports information on
-%                  deposited sediment. 
+% QB_dep         = it is structured as QB_tr, but it reports information on deposited sediment. 
 %
 % Fi_r           = NxC matrix reporting the grain size frequency of the N reaches for the C sediment classes.
 %
@@ -48,10 +47,9 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
     def_indx_tr_cap = 1;
     def_indx_hydraulic = 1;
     def_damstruct = []; % no dams
-    def_extdata = []; % no additional sed flows
+    def_extdata = []; % no external sed flows
 
-%% load dams and additional sediment input
-
+%% load dams and external sediment input
 
     if ~isempty(varargin) && (strcmp(varargin{1},'default')) %if default setting
         
@@ -114,7 +112,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
             damstruct = def_damstruct;
         end
         
-        %if additional sediment contribution are present, load file
+        %if external sediment contribution are present, load file
         answer = questdlg('Are external sediment contribution present in the network?', 'Load external sediment contribution' ,'Yes','No','No');
         
         if strcmp(answer,'Yes') 
@@ -155,10 +153,10 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
         Fi_r = Fi_r_input;
     end
 
-%% additional sediment contribution initialization
+%% external sediment contribution initialization
 
-    %distribute additional sediment contribution among the defined sediment
-    %classes by defining the GSD using the flow D50
+    %distribute external sediment contribution among the sediment
+    %classes by defining the GSD from the input D16, D50, and D84
     sed_contribution = zeros(length(extdata), length(psi)+1);
        
     if ~isempty(extdata)
@@ -255,9 +253,9 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
             %check for incoming sediment flows from the river network
             Qbi_incoming = squeeze(nansum(Qbi_tr(:,Network.Upstream_Node{n},:),2));
            
-            %check if there are additional sediment flows
-            Qbi_additional = nansum( sed_contribution(sed_contribution(:,1) == n,2:end),1);    
-            Qbi_incoming(n,:) = Qbi_additional; 
+            %check if there are external sediment flows
+            Qbi_external = nansum( sed_contribution(sed_contribution(:,1) == n,2:end),1);    
+            Qbi_incoming(n,:) = Qbi_external; 
             
             if any(any(Qbi_incoming))  % check if there are incoming sediment cascades 
                 
@@ -291,13 +289,13 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
                     %the remaining sediment loads proceed downstream
                     Qbi_tr(id_sel,n,part_tr>0) = max(nansum(Qbi_tr(id_sel,Network.Upstream_Node{n},part_tr>0),2) -  Qbi_dep(id_sel,n,part_tr>0),0);
 
-                    %deposit the relative fraction of additional sed.flow 
-                    Qbi_additional(part_tr>0) = Qbi_additional(part_tr>0) - squeeze(Qbi_dep(n,n,part_tr>0))';
+                    %deposit the relative fraction of external sed.flow 
+                    Qbi_external(part_tr>0) = Qbi_external(part_tr>0) - squeeze(Qbi_dep(n,n,part_tr>0))';
                    
                     %for the sed. classes that exceed the transport
                     %capacity, no new sub-cascade is created, except when
-                    %additional sed.flows are present.
-                    Qbi_tr(n,n,part_tr>0) = Qbi_additional(part_tr>0) ;
+                    %external sed.flows are present.
+                    Qbi_tr(n,n,part_tr>0) = Qbi_external(part_tr>0) ;
                     
                 end
 
@@ -307,8 +305,8 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
                 if ~isempty(part_tr(part_tr<0))
                     
                     %quantify the entrained sediment flow by measuring the exceeding transport capacity, 
-                    %applying supply limitation via tr_limit and adding the additional sediment contributions
-                    Qbi_tr(n,n,part_tr<0) = Qbi_additional(part_tr<0) - part_tr(part_tr<0) .* tr_limit(n);
+                    %applying supply limitation via tr_limit and adding the external sediment contributions
+                    Qbi_tr(n,n,part_tr<0) = Qbi_external(part_tr<0) - part_tr(part_tr<0) .* tr_limit(n);
                     
                     % all the incoming sub_cascades for the sediment classes with part_tr <0 proceed downstream unaltered
                     Qbi_tr(id_sel,n,part_tr<0) = nansum(Qbi_tr(id_sel,Network.Upstream_Node{n},part_tr<0),2);

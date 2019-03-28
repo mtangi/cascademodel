@@ -1,4 +1,4 @@
-function [] = interactive_plot (Qbi_tr, Qbi_dep, Fi_r, ReachData ,Network, damdata , extdata )
+function [] = interactive_connectivity_evaluation (Qbi_tr, Qbi_dep, Fi_r, ReachData ,Network, damdata , extdata )
 %plot input data and show reach features and sediment trasport processes by
 %clicking on it
 
