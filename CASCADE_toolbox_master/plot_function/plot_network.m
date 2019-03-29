@@ -37,12 +37,16 @@ def_cMap = 'parula';
 def_ShowID = 'off';
 def_legendtype = 'percentile';
 
-fontsize = 10;
+fontsize = 12;
 title_fontsize = 12;
 
 %function needs 1xN vector, switch to 1xN if vector is Nx1
 if nargin ~= 1 && isequal(size(plotvariable), [length(ReachData), 1])
     plotvariable = plotvariable';
+end
+
+if nargin == 1
+    plotvariable = [];
 end
 
 %% read additional inputs 
@@ -74,7 +78,7 @@ end
 % set cClass
 if isempty(p.Results.cClass)
     i_class = 100/n_class + 0.001; %interval between classes
-    cClass = unique(prctile(plotvariable,0:i_class:100)); 
+    cClass = unique(prctile(plotvariable(plotvariable~=0),0:i_class:100)); 
     if ~isempty(plotvariable); cClass(end) = max(plotvariable); end
     cClass = [0, cClass(cClass~=0)]; %leave just 1 class equal to 0
   
