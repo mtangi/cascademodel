@@ -26,7 +26,7 @@ Network = graph_preprocessing (ReachData);
 %run CASCADE (customize mode)
 %[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'additional_sed_flow', additional_sed_flow ,'dams',damdata,'tr_cap_equation', 1, 'hydr_estimation',1 , 'Fi_r', Fi_r);
 
-interactive_connectivity_evaluation ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
+interactive_connectivity_assessment ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
 
 %% Run CASCADE with default mode
 
@@ -65,7 +65,7 @@ interactive_connectivity_evaluation ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network
 % 
 % [Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'external_sed_flow', extdata ,'dams',damdata,'tr_cap_equation', 1, 'hydr_estimation',1 , 'Fi_r', Fi_r);
 % 
-% sediment_management_analysis ( ReachData , Network , damdata , extdata );
+% connectivity_alteration_assessment ( ReachData , Network , damdata , extdata );
 
 %% Run CASCADE for a different water flow scenario 
 
@@ -96,7 +96,7 @@ interactive_connectivity_evaluation ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network
 % 
 % [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network  ,'default' );
 % 
-% Plot outputs
+% %Plot outputs
 %
-%interactive_connectivity_evaluation ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
+%interactive_connectivity_assessment ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
 

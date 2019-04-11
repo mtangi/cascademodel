@@ -1,4 +1,4 @@
-function [] = sediment_management_analysis (ReachData ,Network, damdata , extdata )
+function [] = connectivity_alteration_assessment (ReachData ,Network, damdata , extdata )
 %Plot network sediment transport data and allows for the addition or removal of dams and external sediment sources. 
 %Show reach features and sediment transport processes by clicking on it. 
 

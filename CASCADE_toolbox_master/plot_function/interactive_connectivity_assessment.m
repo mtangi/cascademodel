@@ -1,4 +1,4 @@
-function [] = interactive_connectivity_evaluation (Qbi_tr, Qbi_dep, Fi_r, ReachData ,Network, damdata , extdata )
+function [] = interactive_connectivity_assessment (Qbi_tr, Qbi_dep, Fi_r, ReachData ,Network, damdata , extdata )
 %plot input data and show reach features and sediment trasport processes by
 %clicking on it
 
@@ -36,7 +36,7 @@ end
 %% plot river network with plotvariable
 
 n_classes = 15;
-linewidth = 4;
+linewidth = 5;
 
 main_fig(1) = figure;
 plot_network ( ReachData , nansum(nansum(plotvariable,3)), 'ClassNumber', n_classes , 'Linewidth', linewidth,'cMap', color_bar);
