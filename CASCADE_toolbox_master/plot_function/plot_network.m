@@ -12,7 +12,7 @@ function [fig] = plot_network(ReachData, plotvariable, varargin)
 %
 % Optional input (name-value pair argument):
 %
-% Show_ID.: if 'on', displays the reach ID on the midpoint of the reach
+% ShowID: if 'on', displays the reach ID on the midpoint of the reach
 % cMap: name of color map used in the figure (default : parula)
 % legend_type : if 'colorbar', displays data with colorbar, else
 %                   the data will be displayed with percentiles color classes
@@ -37,8 +37,8 @@ def_cMap = 'parula';
 def_ShowID = 'off';
 def_legendtype = 'percentile';
 
-fontsize = 12;
-title_fontsize = 12;
+fontsize = 15;
+title_fontsize = 16;
 
 %function needs 1xN vector, switch to 1xN if vector is Nx1
 if nargin ~= 1 && isequal(size(plotvariable), [length(ReachData), 1])
@@ -178,6 +178,10 @@ else
 end
 
 %% enlarge figure
+
+
+set(gca,'xtick',[])
+set(gca,'ytick',[])
 
 h =  findobj('type','figure'); %find open figures
 n = length(h);
