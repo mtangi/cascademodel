@@ -168,23 +168,26 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
     sed_list = struct('name', { 'Boulders/cobbles' , 'Gravel' , 'Sand' , 'Silt/clay'}, ...
                        'boundary', { [-10 -6] , [-5.9999 -1 ] ,  [-0.9999 4 ] , [4.0001 10 ]});
     
-    %find which class in psi correspond to the one defined in des_list 
+    %find which class in psi correspond to the one defined in sed_list 
     
     for i=1:length(sed_list)
         sed_list(i).psi_class = find(and(psi>sed_list(i).boundary(1),psi<sed_list(i).boundary(2)));
     end
                      
-    %find 
+    %matrix damdata_class uses the data in damstruct and sed_list to derive
+    %the trapping efficiency of each dam (rows in damdata_class) for each
+    %psi class
+    % in column 1, damdata_class report the id of the dam node
+    
     if ~isempty(damstruct)
-        damdata = zeros(length(damstruct),length(psi + 1));
-        damdata(:,1) = [damstruct.node_id];
-        damdata(:, sed_list(1).psi_class +1) = repmat([damstruct.cobble_trap]',1,length( sed_list(1).psi_class) );
-        damdata(:, sed_list(2).psi_class +1) = repmat([damstruct.gravel_trap]',1,length( sed_list(2).psi_class) );
-        damdata(:, sed_list(3).psi_class +1) = repmat([damstruct.sand_trap]',1,length( sed_list(3).psi_class) );
-        damdata(:, sed_list(4).psi_class +1) = repmat([damstruct.silt_trap]',1,length( sed_list(4).psi_class) );
-          
+        damdata_class = zeros(length(damstruct),length(psi + 1));
+        damdata_class(:,1) = [damstruct.node_id];
+        damdata_class(:, sed_list(1).psi_class +1) = repmat([damstruct.cobble_trap]',1,length( sed_list(1).psi_class) );
+        damdata_class(:, sed_list(2).psi_class +1) = repmat([damstruct.gravel_trap]',1,length( sed_list(2).psi_class) );
+        damdata_class(:, sed_list(3).psi_class +1) = repmat([damstruct.sand_trap]',1,length( sed_list(3).psi_class) );
+        damdata_class(:, sed_list(4).psi_class +1) = repmat([damstruct.silt_trap]',1,length( sed_list(4).psi_class) );
     else
-        damdata = zeros(1,length(psi + 1));
+        damdata_class = zeros(1,length(psi + 1));
     end
 
 %% hydraulic parameters 
@@ -228,8 +231,8 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
     clear QB_dep; QB_dep = zeros(n_reaches,n_reaches); 
 
     %% Routing scheme
-    
-    for n = NH
+
+   for n = NH
         
         if any(n == sources) %check if the node is a source node
             
@@ -238,17 +241,8 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
             Qbi_tr(n,n,:) = min(squeeze(Qbi_tr(n,n,:))', squeeze(Qbi_tr(n,n,:))'.*tr_limit(n) + nansum( sed_contribution(sed_contribution(:,1) == n,2:end),1));
             
             Qbi_dep(n,n,:) = max(nansum( sed_contribution(sed_contribution(:,1) == n,2:end),1) - squeeze(Qbi_tr(n,n,:))',0);
-            QB_tr(n,n) = sum(Qbi_tr(n,n,:));
-            
+                        
         else
-            
-            %chech if there is a dam on the To-Node of the reach
-            if isempty(damdata(damdata(:,1) == ReachData(n).ToN ,2:end))
-                
-                trap_efficiency = zeros(1,length(psi));
-            else
-                trap_efficiency = damdata(damdata(:,1)== ReachData(n).ToN  ,2:end);
-            end
             
             %check for incoming sediment flows from the river network
             Qbi_incoming = squeeze(nansum(Qbi_tr(:,Network.Upstream_Node{n},:),2));
@@ -320,15 +314,25 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
                                
             end
             
-            %apply effect of dams
-            Qbi_dep(:,n,:) = squeeze(Qbi_dep(:,n,:)) + squeeze(Qbi_tr(:,n,:)) .* trap_efficiency;
-            Qbi_tr(:,n,:) = squeeze(Qbi_tr(:,n,:)) .* (1-trap_efficiency);
             
-            % Update total flows transported and deposited
-            QB_tr(:,n)= nansum(Qbi_tr(:,n,:),3);
-            QB_dep(:,n)= nansum(Qbi_dep(:,n,:),3);
-
         end 
+        
+        %chech if there is a dam on the To-Node of the reach
+        if isempty(damdata_class(damdata_class(:,1) == ReachData(n).ToN ,2:end))          
+            trap_efficiency = zeros(1,length(psi));
+        else
+            trap_efficiency = damdata_class(damdata_class(:,1)== ReachData(n).ToN  ,2:end);
+        end
+
+        %apply effect of dams
+        Qbi_dep(:,n,:) = squeeze(Qbi_dep(:,n,:)) + squeeze(Qbi_tr(:,n,:)) .* trap_efficiency;
+        Qbi_tr(:,n,:) = squeeze(Qbi_tr(:,n,:)) .* (1-trap_efficiency);
+   
+        % Update total flows transported and deposited
+        QB_tr(:,n)= nansum(Qbi_tr(:,n,:),3);
+        QB_dep(:,n)= nansum(Qbi_dep(:,n,:),3);
+        
+
     end
     
     
