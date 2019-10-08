@@ -99,13 +99,17 @@ if nargin == 1 || isempty(plotvariable)
 
 elseif strcmp(legendtype,'colorbar')
     
-    %read colormap
-    cMapName=[name_colormap '( 100 )'];
-    cMap=eval(cMapName);  
-    
     %find color in colormap
     pos = ceil((plotvariable-min(plotvariable))./(max(plotvariable)-min(plotvariable)).*99+0.001);
+    pos(isnan(pos)) = 1;
+    
+    %define color map
+    cMapLength = length(pos)+1;
 
+    %read colormap    
+    cMapName = [name_colormap '(' num2str(cMapLength) ')'];
+    cMap=eval(cMapName);  
+    
     tick = 0:0.1:1;
     tick_val = tick.*(max(plotvariable)-min(plotvariable))+min(plotvariable);
         
