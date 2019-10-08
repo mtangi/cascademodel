@@ -14,7 +14,7 @@ function [fig] = plot_network(ReachData, plotvariable, varargin)
 %
 % ShowID: if 'on', displays the reach ID on the midpoint of the reach
 % cMap: name of color map used in the figure (default : parula)
-% legend_type : if 'colorbar', displays data with colorbar, else
+% legendtype : if 'colorbar', displays data with colorbar, else
 %                   the data will be displayed with percentiles color classes
 % title : Name of the output figure;
 % Linewidth : width of the reach lines, either a single value of a Nx1
@@ -108,9 +108,7 @@ elseif strcmp(legendtype,'colorbar')
 
     tick = 0:0.1:1;
     tick_val = tick.*(max(plotvariable)-min(plotvariable))+min(plotvariable);
-    
-    figure;
-    
+        
     for i=1:length(ReachData)
         
         plot([ReachData(i).X],[ReachData(i).Y],'Color',cMap(pos(i),:),'LineWidth',line_width(i));
