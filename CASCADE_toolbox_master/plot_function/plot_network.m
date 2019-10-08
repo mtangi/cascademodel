@@ -1,10 +1,10 @@
 function [fig] = plot_network(ReachData, plotvariable, varargin)
 % PLOT_NETWORK plots the river network and visualizes CONTINOUS DATA. . 
-
+%
 % Can use color to represent different attributes. 
 % Colorcode can be clarified using a legend. 
 % Line width can represent different attributes.
-
+%
 % INPUT:
 %
 % ReachData: Nx1 struct containing from- and to-node infomation and attribute values. 
@@ -21,7 +21,7 @@ function [fig] = plot_network(ReachData, plotvariable, varargin)
 %                   vector of reach attributes;
 % ClassNumber: number of percentiles color classes 
 % cClass : vector of values of classes used for the legend
-
+%
 %----
 %
 % OUTPUT
