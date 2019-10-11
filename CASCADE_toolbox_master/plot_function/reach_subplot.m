@@ -7,8 +7,9 @@ function [fig] = reach_subplot(reach_ID, Qbi_tr, Qbi_dep , Fi_r, ReachData ,Netw
 global psi
 QB_tr = nansum(Qbi_tr,3);
 
-%% define cumulative sediment distribution and D_values
+node_ID = ReachData([ReachData.reach_id] == reach_ID).FromN;
 
+%% define cumulative sediment distribution and D_values
 
 dmi= 2.^(-psi)/1000;
 dmi_finer = dmi*1000;
@@ -23,8 +24,18 @@ for i=2:size(Perc_finer,1)
     end
 end
 
-%compute changes in sediment size
+%% find reach D values from GSD
+
+%find reach sediment size from ReachData
 D_changes = [ReachData(reach_ID).D16 ReachData(reach_ID).D50 ReachData(reach_ID).D84];
+
+%compute changes in sediment size using linear interpolation of the sediment distribution
+% D_changes = zeros(length(D_values),1);
+% for j=1:length(D_values)
+%    a = min( find( Perc_finer(:,node_ID) >  D_values(j), 1, 'last' ),length (psi)-1);
+%    D_changes(j) = (D_values(j) - Perc_finer(a+1,node_ID))/(Perc_finer(a,node_ID) - Perc_finer(a+1,node_ID))*(dmi(a)-dmi(a+1))+dmi(a+1);
+%    D_changes(j) = D_changes(j)*(D_changes(j)>0) + dmi(end)*(D_changes(j)<0);
+% end
 
 %% plot figure
 
@@ -36,15 +47,15 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     ax = subplot(2, 2, 1);
     %choose method to display sediment flows
     
-    if nansum(QB_tr(:,reach_ID)) > 10000
+    if nansum(QB_tr(:,node_ID)) > 10000
         fun_str = @(x)num2str(x,'%10.3e');
     else
         fun_str = @(x)num2str(x);
     end
     
     str = {[sprintf('Reach %d', reach_ID)],[],...
-        ['\fontsize{12} Width = ', num2str(round(ReachData(reach_ID).Wac)), ' m'] , [' Length = ', num2str(round(ReachData(reach_ID).Length)), ' m'] , [' Slope = ', num2str(round(ReachData(reach_ID).Slope,4))],[' Q_{ scenario} = ', num2str(round(ReachData(reach_ID).Q)), ' m^3/s'],[],...
-        ['QB trasp = ', fun_str(nansum(QB_tr(:,reach_ID))) , ' Kg/s' ], ['QB entrained = ', fun_str(QB_tr(reach_ID,reach_ID)) , ' Kg/s' ],['QB deposited = ', fun_str(nansum(nansum(Qbi_dep(:,reach_ID,:),3))) , ' Kg/s' ]};
+        ['\fontsize{12} Width = ', num2str(round(ReachData(node_ID).Wac)), ' m'] , [' Length = ', num2str(round(ReachData(node_ID).Length)), ' m'] , [' Slope = ', num2str(round(ReachData(node_ID).Slope,4))],[' Q_{ scenario} = ', num2str(round(ReachData(node_ID).Q)), ' m^3/s'],[],...
+        ['QB trasp = ', fun_str(nansum(QB_tr(:,node_ID))) , ' Kg/s' ], ['QB entrained = ', fun_str(QB_tr(node_ID,node_ID)) , ' Kg/s' ],['QB deposited = ', fun_str(nansum(nansum(Qbi_dep(:,node_ID,:),3))) , ' Kg/s' ]};
 
     text(0,0.5,str,'FontSize',16);
     set ( ax, 'visible', 'off')
@@ -55,8 +66,8 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     subplot(2,2,2)
     
     %define colorscale for sediment contribution to the reach (up_nodes)
-    up_nodes = find(Network.Distance_Upstream{reach_ID,1} ~= Inf); % find up_nodes)
-    col = [ceil(  QB_tr(up_nodes, reach_ID) ./  max(QB_tr(up_nodes , reach_ID)) .*99+0.001);1];
+    up_nodes = find(Network.Distance_Upstream{node_ID,1} ~= Inf); % find up_nodes)
+    col = [ceil(  QB_tr(up_nodes, node_ID) ./  max(QB_tr(up_nodes , node_ID)) .*99+0.001);1];
     
     col(isnan(col)) = 100; %remove NaN
     
@@ -78,7 +89,7 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     
     %plot simplified network
     
-    line([ReachData(reach_ID).x_FN  ReachData(reach_ID).x_TN],[ReachData(reach_ID).y_FN  ReachData(reach_ID).y_TN],...
+    line([ReachData(node_ID).x_FN  ReachData(node_ID).x_TN],[ReachData(node_ID).y_FN  ReachData(node_ID).y_TN],...
         'color','blue','linewidth',10);
         
     for ll=1:length(up_nodes)
@@ -88,10 +99,10 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
       
     %insert colorbar
     tick = 0:max(1/(length(col)-1),0.2):1; %the number of ticks in the colorbar depends on the number of up_nodes (max 5)
-    tick_val = tick .* max(QB_tr(up_nodes,reach_ID));
+    tick_val = tick .* max(QB_tr(up_nodes,node_ID));
     
     % prepare the text for the legend
-    if max(QB_tr(up_nodes,reach_ID))>10^4 
+    if max(QB_tr(up_nodes,node_ID))>10^4 
         legEnt=num2str(tick_val','%10.2E'); 
     else
         legEnt=num2str(chop(tick_val',4));
@@ -113,7 +124,7 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     %passing through the reach
     subplot(2,2,3 )
 
-    semilogx(dmi*1000,Perc_finer(:,reach_ID),'LineWidth',2); 
+    semilogx(dmi*1000,Perc_finer(:,node_ID),'LineWidth',2); 
     grid on
     grid minor
     
@@ -121,7 +132,7 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     xlim([min(dmi_finer) max(dmi_finer)])    
     xlabel('D (mm)');
     ylabel('% Finer'); 
-    str=sprintf('Sediment Distribution of total sediment flux');
+    str=sprintf('Sediment distribution of total sediment flux');
     title(str)
     pax = gca;
     pax.FontSize = 10;    
@@ -131,7 +142,7 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     %SUBPLOT 4 : deposition and entraining for each sediment class
     %considered
     subplot(2,2,4 )
-    b = bar([squeeze(Qbi_tr(reach_ID,reach_ID,:)),nansum(squeeze(Qbi_dep(:,reach_ID,:)),1)']);
+    b = bar([squeeze(Qbi_tr(node_ID,node_ID,:)),nansum(squeeze(Qbi_dep(:,node_ID,:)),1)']);
     b(1).FaceColor = 'r';b(2).FaceColor = 'g';
     ylabel('Kg/s');
     xlabel('sediment classes [phi]');
