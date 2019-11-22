@@ -121,7 +121,7 @@ elseif strcmp(legendtype,'colorbar')
     end
     
     % define the visualization of plot values for the legend
-    if max(plotvariable)>10^4; legEnt=num2str(tick_val','%10.2E'); else legEnt=num2str(tick_val',4); end; 
+    if max(plotvariable)>10^4; legEnt=num2str(tick_val','%10.2E'); else legEnt=num2str(tick_val','%.4g'); end; 
 
     
     colormap(name_colormap)
@@ -167,7 +167,7 @@ else
          hh_leg(leggg) = line([ReachData(1).x_FN ReachData(1).x_FN],[ReachData(1).y_FN ReachData(1).y_FN],'color',cMap(leggg,:),'linewidth',3);  % for each color attribute value make a fake line with length 0. 
    end
    
-   if max(cClass)>10^4; legEnt=num2str(cClass','%10.2E'); else legEnt=num2str(cClass',4); end; % prepare the text for the legend
+   if max(cClass)>10^4; legEnt=num2str(cClass','%10.2E'); else legEnt=num2str(cClass','%.4g'); end; % prepare the text for the legend
     
    % create legend 
    leg = legend(hh_leg,legEnt);
