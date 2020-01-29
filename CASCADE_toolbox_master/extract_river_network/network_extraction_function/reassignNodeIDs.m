@@ -1,4 +1,4 @@
-function [ newFN, newTN, outlet_node ] = reassignNodeIDs(FN, TN )
+function [ newFN, newTN ] = reassignNodeIDs(FN, TN )
 %reassignNodeIds: Node Ids are not continous after the aggregation
 %procedure. This function creates new, continuous node IDs that represent network topology 
 
@@ -9,8 +9,6 @@ function [ newFN, newTN, outlet_node ] = reassignNodeIDs(FN, TN )
 %%% Outputs
 % newFN: new, continuous from-node IDs 
 % newTN: new, continuous to-node IDs
-% outlet_node: list of outlet nodes (nodes that occur only as to node, but
-%              not as from node). In a single river system, there should be only 1. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -21,10 +19,13 @@ transferTable=[FN newFN]; % the transfer table maps these new IDs to the previou
 i=0; % counter for the outletnodes
 
 for tn=unique(TN)' % loop through all to-nodes 
+   if tn==131
+       endas=0; 
+   end
     
     oldTN=tn ; % get the old ID of the current to-node
-    oldTNPos=TN==oldTN; % find at which position this to-node ID was used (it can be at multiple positions, because a node can be a to-node for multiple reaches at confluences). 
-
+    oldTNPos=find(TN==oldTN); % find at which position this to-node ID was used (it can be at multiple positions, because a node can be a to-node for multiple reaches at confluences). 
+    
     if isempty(transferTable(transferTable(:,1)==oldTN,2)) % if the to-node was not used as from-node (this means that the current to-node is at the outlet of the network)
          i=i+1; 
          newTN(oldTNPos,1)=transferTable(oldTNPos,2);
@@ -35,13 +36,5 @@ for tn=unique(TN)' % loop through all to-nodes
     
 end
 
-% find outlet (control this afterwards, if all went right there should be only one value in here) . 
-
-oldTNPos=TN==oldTN; % find at which position this to-node ID was used (it can be at multiple positions, because a node can be a to-node for multiple reaches at confluences). 
-outlet_node=newTN(oldTNPos);
-
-if length(outlet_node) > 1
-    disp('Warning: multiple outlet reaches found');
-end
 end
 
