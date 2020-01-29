@@ -23,7 +23,8 @@ i=0; % counter for the outletnodes
 for tn=unique(TN)' % loop through all to-nodes 
     
     oldTN=tn ; % get the old ID of the current to-node
-    
+    oldTNPos=TN==oldTN; % find at which position this to-node ID was used (it can be at multiple positions, because a node can be a to-node for multiple reaches at confluences). 
+
     if isempty(transferTable(transferTable(:,1)==oldTN,2)) % if the to-node was not used as from-node (this means that the current to-node is at the outlet of the network)
          i=i+1; 
          newTN(oldTNPos,1)=transferTable(oldTNPos,2);
@@ -39,5 +40,8 @@ end
 oldTNPos=TN==oldTN; % find at which position this to-node ID was used (it can be at multiple positions, because a node can be a to-node for multiple reaches at confluences). 
 outlet_node=newTN(oldTNPos);
 
+if length(outlet_node) > 1
+    disp('Warning: multiple outlet reaches found');
+end
 end
 
