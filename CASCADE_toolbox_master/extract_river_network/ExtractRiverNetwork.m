@@ -89,7 +89,8 @@ end
 
 % reach_length_deg=reach_length_km /(r_earth_km*pi/180); % set desired reach length 
 reach_length_m=reach_length_km*1000;
-if isempty(reach_length_m)
+if isempty(reach_length_m)  % if length is not given, network is partitioned only in confluences
+    
     ReachData = STREAMobj2mapstruct_mod(S);
 else 
     ReachData = STREAMobj2mapstruct_mod(S,'seglength',reach_length_m);
