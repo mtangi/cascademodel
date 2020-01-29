@@ -279,7 +279,7 @@ attributes = [FN_TN_ordered_matrix B(:,2:end)];
 %% Calculate direct drainage area, i.e., only the area that drains into a specific reach. 
 
 direct_AD=zeros(size(attributes,1),1);
-for from_n=1:length(attributes)
+for from_n=1:size(attributes,1)
 
     upstream_reach=find(attributes(:,3)==from_n); % find upstream reach
     if isempty(upstream_reach)
