@@ -253,7 +253,7 @@ FN_TN_messy_matrix = [ reach_ID idFN idTN ];
 
 %% reassign node IDs
 
-[ new_idFN, new_idTN ] = reassignNodeIDs(FN_TN_messy_matrix(:,2), FN_TN_messy_matrix(:,3) );
+[ new_idFN, new_idTN, ~ ] = reassignNodeIDs(FN_TN_messy_matrix(:,2), FN_TN_messy_matrix(:,3) );
 
 FN_TN_ordered_matrix = [ reach_ID new_idFN new_idTN ]; 
 

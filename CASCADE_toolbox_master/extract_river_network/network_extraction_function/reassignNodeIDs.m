@@ -1,4 +1,4 @@
-function [ newFN, newTN ] = reassignNodeIDs(FN, TN )
+function [ newFN, newTN, outlet_node_new ] = reassignNodeIDs(FN, TN )
 %reassignNodeIds: Node Ids are not continous after the aggregation
 %procedure. This function creates new, continuous node IDs that represent network topology 
 
@@ -9,6 +9,8 @@ function [ newFN, newTN ] = reassignNodeIDs(FN, TN )
 %%% Outputs
 % newFN: new, continuous from-node IDs 
 % newTN: new, continuous to-node IDs
+% outlet_node: list of outlet nodes (nodes that occur only as to node, but
+%              not as from node). In a single river system, there should be only 1. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -29,6 +31,7 @@ for tn=unique(TN)' % loop through all to-nodes
     if isempty(transferTable(transferTable(:,1)==oldTN,2)) % if the to-node was not used as from-node (this means that the current to-node is at the outlet of the network)
          i=i+1; 
          newTN(oldTNPos,1)=transferTable(oldTNPos,2);
+         outlet_node_new = newTN(oldTNPos); % control this afterwards: If all went right there should be only one value in here. 
     else % otherwise: the current to-node was used as from-node 
         newTN(oldTNPos,1)=... 
         transferTable(transferTable(:,1)==oldTN,2); % look up the new value in the transfer table
