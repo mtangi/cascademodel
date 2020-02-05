@@ -105,7 +105,7 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     if max(QB_tr(up_nodes,node_ID))>10^4 
         legEnt=num2str(tick_val','%10.2E'); 
     else
-        legEnt=num2str(chop(tick_val',4));
+        legEnt=num2str(round(tick_val',4));
     end 
     
     %prepare colormap
