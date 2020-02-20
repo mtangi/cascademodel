@@ -27,16 +27,16 @@ tauC = 0.0495;
 %dimensionless shear stress
 tauWP = (Slope*h)/((rho_s/rho_w-1)*D50);
 %dimensionless transport capacity
-qEH = alpha* (max(tauWP - tauC,0) )^(beta);
+qWP = alpha* (max(tauWP - tauC,0) )^(beta);
 %dimensionful transport capacity m3/s 
-qEH_dim = qEH * sqrt((rho_s/rho_w-1)* g * (D50)^3); %m3/s (%formula from the original cascade paper)
-QS_EH = qEH_dim * Wac * rho_s; %kg/s
+qWP_dim = qWP * sqrt((rho_s/rho_w-1)* g * (D50)^3); %m3/s (%formula from the original cascade paper)
+QS_WP = qWP_dim * Wac * rho_s; %kg/s
 
 %The different sediment transport capacities have to be
 %splitted according to Molinas and saved into the Qbi_tr in
 %order to get the right structure for outputs.
 
 Pci = Molinas_rates( Fi_r_reach, h, v, Slope, dmi, D50);
-Qtr_cap = Pci .* QS_EH;
+Qtr_cap = Pci .* QS_WP;
 
 end
