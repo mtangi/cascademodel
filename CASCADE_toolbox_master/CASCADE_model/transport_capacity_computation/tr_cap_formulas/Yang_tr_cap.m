@@ -13,7 +13,7 @@ global psi
 dmi = 2.^(-psi)./1000; %sediment classes diameter (m)
 
 nu = 1.003*1E-6; % kinematic viscosity @ 20�C: http://onlinelibrary.wiley.com/doi/10.1002/9781118131473.app3/pdf
-rho_s = 2600; % sediment densit [kg/m^3]
+rho_s = 2650; % sediment densit [kg/m^3]
 rho_w = 1000; % water density [kg/m^3]
 R = (rho_s/rho_w-1); % Relative sediment density []
 g = 9.81; 

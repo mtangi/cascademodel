@@ -36,7 +36,7 @@ QS_WP = qWP_dim * Wac * rho_s; %kg/s
 %splitted according to Molinas and saved into the Qbi_tr in
 %order to get the right structure for outputs.
 
-Pci = Molinas_rates( Fi_r_reach, h, v, Slope, dmi, D50);
+Pci = Molinas_rates( Fi_r_reach, h, v, Slope, dmi.*1000, D50.*1000);
 Qtr_cap = Pci .* QS_WP;
 
 end

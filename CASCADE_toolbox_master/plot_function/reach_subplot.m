@@ -33,7 +33,8 @@ D_changes = [ReachData(reach_ID).D16 ReachData(reach_ID).D50 ReachData(reach_ID)
 % D_changes = zeros(length(D_values),1);
 % for j=1:length(D_values)
 %    a = min( find( Perc_finer(:,node_ID) >  D_values(j), 1, 'last' ),length (psi)-1);
-%    D_changes(j) = (D_values(j) - Perc_finer(a+1,node_ID))/(Perc_finer(a,node_ID) - Perc_finer(a+1,node_ID))*(dmi(a)-dmi(a+1))+dmi(a+1);
+%    D_changes(j) = (D_values(j) - Perc_finer(a+1,node_ID))/(Perc_finer(a,node_ID) - Perc_finer(a+1,node_ID))*(-psi(a)+psi(a+1))-psi(a+1);
+%    D_changes(j) =  2^(D_changes(j))./1000;
 %    D_changes(j) = D_changes(j)*(D_changes(j)>0) + dmi(end)*(D_changes(j)<0);
 % end
 
