@@ -76,7 +76,7 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
     color_scale = hot(220);
     color_scale = [color_scale(1:5,:); color_scale(50:end,:)];
 
-    %plot full network
+    %plot full network - mantain river shape
     
 %     plot([ReachData(node).X],[ReachData(node).Y],'Color','blue','linewidth',6);
 %     hold on
@@ -88,7 +88,7 @@ fig = figure('rend','painters','pos',[100 150 1000 600]);
 %         
 %     end
     
-    %plot simplified network
+    %plot simplified network - straigth lines between nodes
     
     line([ReachData(node_ID).x_FN  ReachData(node_ID).x_TN],[ReachData(node_ID).y_FN  ReachData(node_ID).y_TN],...
         'color','blue','linewidth',10);
