@@ -8,7 +8,6 @@ It also allows for the integration of dams and barriers as well as for considera
 Applications include impact assessment of dam portfolios, localization of dominant sources of sediment for downstream river reaches and visualization of basin-scale sediment connectivity under alternative sediment management strategies. 
 The toolbox is equipped with interactive visualization tools for displaying the model outputs and exploring the alteration caused by disturbances. 
 
-
 ## Requirements
 
 CASCADE toolbox requires MATLAB™ R2017b or newer, with the Text Analytics Toolbox™ and the Bioinformatics Toolbox™.
