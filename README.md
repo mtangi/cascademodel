@@ -10,7 +10,7 @@ The toolbox is equipped with interactive visualization tools for displaying the 
 
 ## Requirements
 
-CASCADE toolbox requires MATLAB™ R2017b or newer, with the Text Analytics Toolbox™ and the Bioinformatics Toolbox™.
+CASCADE toolbox requires MATLAB™ R2017b or newer version, with the Text Analytics Toolbox™ and the Bioinformatics Toolbox™.
 For the river network extraction from a Digital Elevation Model, it is required the MATLAB toolbox [TopoToolbox 2.2](https://topotoolbox.wordpress.com/topotoolbox/).
 
 
