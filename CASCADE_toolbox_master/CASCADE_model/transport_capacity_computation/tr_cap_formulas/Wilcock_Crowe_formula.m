@@ -1,4 +1,4 @@
-function [ reach_tr_cap ] = Wilcock_Crowe_tr_cap( Fi_r_reach , D50, Slope, Wac , h)
+function [ tr_cap,tau,tau_r50 ] = Wilcock_Crowe_formula( Fi_r_reach , D50, Slope, Wac , h)
 
 %WILCOCK_CROWE_TR_CAP returns the value of the transport capacity for each sediment
 %class in the reach measured using the wilcock and crowe equations
@@ -21,17 +21,22 @@ Fr_s = sum((psi > - 1) .* Fi_r_reach); % Fraction of sand in river bed (sand con
 
 %% Transport capacity from Wilcock-Crowe equations
 
-b = 0.67 ./ (1 + exp(1.5 - dmi./D50));
+tau = (rho_w * g * h * Slope ); % bed shear stress [Kg m-1 s-1]
+tau_r50 = (0.021 + 0.0015 * exp( -20 * Fr_s ) ) * (rho_w * R * g * D50); % reference shear stress for the mean size of the bed surface sediment [Kg m-1 s-1]
 
-tau = (rho_w * g * h * Slope );
-tau_r50 = (0.021 + 0.0015 * exp( -20 * Fr_s ) ) * (rho_w * R * g * D50);
+b = 0.67 ./ (1 + exp(1.5 - dmi./D50)); %hiding factor
 
-tau_ri = tau_r50 * (dmi./D50).^b;
+tau_ri = tau_r50 * (dmi./D50).^b; % reference shear stress for each sediment class [Kg m-1 s-1]
+
 phi_ri = tau./tau_ri;
 
+% Dimensionless transport rate for each sediment class [-]
+% The formula changes for each class according to the phi_ri of the class
+% is higher or lower then 1.35
 W_i = (phi_ri >= 1.35 ) .* (14 .* (max(1 - 0.894./sqrt(phi_ri),0)).^4.5) + (phi_ri < 1.35 ).* (0.002.*(phi_ri).^7.5) ;
-reach_tr_cap = Wac .* W_i .* Fi_r_reach .* rho_s .* (tau./rho_w).^(3/2) / (R*g);
-reach_tr_cap(isnan(reach_tr_cap)) = 0; %if Qbi_tr are NaN, they are put to 0
 
+% Dimensionful transport rate for each sediment class [kg/s]
+tr_cap = Wac .* W_i .* Fi_r_reach .* rho_s .* (tau./rho_w).^(3/2) / (R*g);
+tr_cap(isnan(tr_cap)) = 0; %if Qbi_tr are NaN, they are put to 0
 
 end

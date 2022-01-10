@@ -16,22 +16,20 @@ load('Vjosa_ReachData');
 % ReachData = shaperead('shapefile_name');
 %
 %% Graph Preprocessing
-Network = graph_preprocessing (ReachData);
+Network = graph_preprocessing(ReachData);
 
 %% Run CASCADE in interactive mode
 
-%run CASCADE (intercative mode)
+%run CASCADE (interactive mode)
 [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network  );
 
-%run CASCADE (customize mode)
-%[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'additional_sed_flow', additional_sed_flow ,'dams',damdata,'tr_cap_equation', 1, 'hydr_estimation',1 , 'Fi_r', Fi_r);
-
+%plot result in interactive mode
 interactive_connectivity_assessment ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network);
 
 %% Run CASCADE with default mode
 
-% % run CASCADE (default mode)
-%
+% run CASCADE (default mode)
+
 %[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'default' );
 
 %% Run CASCADE with customized mode (name-pair value)
@@ -39,7 +37,7 @@ interactive_connectivity_assessment ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network
 % % run CASCADE (customize mode)
 % % requires Fi_r already extracted for another CASCADE run in default mode
 %
-%[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network ,'additional_sed_flow', additional_sed_flow ,'dams',damdata,'tr_cap_equation', 1, 'hydr_estimation',1 , 'Fi_r', Fi_r);
+%[ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r] = CASCADE_model( ReachData ,  Network,'tr_cap_equation', 3, 'partition_formula', 2, 'hydr_estimation',1 , 'Fi_r', Fi_r);
 
 
 %% Run CASCADE with additional input
@@ -51,7 +49,7 @@ interactive_connectivity_assessment ( Qbi_tr, Qbi_dep, Fi_r, ReachData , Network
 %
 % % load damdata and extdata
 % 
-% load('Vjosa_extdata.mat'); 
+ load('Vjosa_extdata.mat'); 
 % load('Vjosa_damdata.mat');
 % 
 % % Apply transport limitation to all reaches except the source reaches

@@ -1,4 +1,4 @@
-function std = GSD_std(Fi_r , dmi)
+ function std = GSD_std(Fi_r , dmi)
 % GSD_std(GSD , dmi) calculates the geometric standard deviation of
 % input X, using the formula std = sqrt(D84/D16).
 
