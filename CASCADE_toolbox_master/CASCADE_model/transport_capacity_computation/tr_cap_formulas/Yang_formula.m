@@ -57,7 +57,7 @@ QS_grams = QS_ppm;% in g/m3
 QS_grams_per_sec = QS_grams.*Q; % in g/s
 QS_Yang = QS_grams_per_sec/1000; %kg/s
 
-Qtr_cap = QS_Yang;
+tr_cap = QS_Yang;
 
 end
 

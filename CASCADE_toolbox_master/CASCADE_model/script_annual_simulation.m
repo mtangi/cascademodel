@@ -62,7 +62,6 @@ Fi_r_year = zeros(size(ReachData,1),length(psi));
 Fi_r_perc = zeros(size(ReachData,1),length(psi),length(p_class_length));
 
 % loop for each scenario 
-
 for i=1:length(p)-1
     
     q = num2cell(Vjosa_Q_scenario(:,i+1));

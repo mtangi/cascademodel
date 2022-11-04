@@ -9,7 +9,7 @@ function Qtr_cap = tr_cap_junction( tr_cap_id , part_id , Fi_r_reach , D50 ,  Sl
 global psi
 dmi = 2.^(-psi)./1000; %sediment classes diameter (m)
  
-%choose transport cappacity formula
+%choose transport capacity formula
 switch tr_cap_id
     case 1
         tr_cap_formula = @(D50)Parker_Klingeman_formula( Fi_r_reach, D50, Slope, Wac , h);

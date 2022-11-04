@@ -34,7 +34,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
 %
 %
 %% define sediment classes
-%sediment classes defined in Krumbein phi (φ) scale
+%sediment classes defined in Krumbein phi scale
 
     sed_range = [-9.5 , 7.5]; %range of sediment sizes considered in the model
     class_size = 1; %amplitude of the sediment classes
