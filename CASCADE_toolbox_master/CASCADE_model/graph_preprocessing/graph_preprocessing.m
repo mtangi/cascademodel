@@ -51,14 +51,12 @@ for n=FromN'
         
         if Network.Downstream.Distance{n}(j)~=Inf
             
-            Network.Downstream.Path{n}{j} ;
             Network.Downstream.Path{n}{j} = [Network.Downstream.Path{n}{j}, j];
             
         end
         
         if Network.Upstream.Distance{n}(j)~=Inf
             
-            Network.Upstream.Path{n}{j} ;
             Network.Upstream.Path{n}{j} = [n, flip(Network.Upstream.Path{n}{j})];
             
         end
