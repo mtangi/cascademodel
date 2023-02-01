@@ -36,15 +36,37 @@ ToN = [ReachData.ToN]';
 Length = [ReachData.Length]';
 
 [D,~]=write_adj_matrix(FromN , ToN , Length);
-[Dus,~]=write_adj_matrix(ToN , FromN , Length);
 
-[Network.Downstream.Distance, Network.Downstream.Path, Network.Downstream.Predecessors] = ...
-    (arrayfun(@(fromnode) graphshortestpath(D,fromnode),FromN,'UniformOutput',false));
+Dig=digraph(D);
 
-% the upstream network definition is required to find reservoirs
-% upstream from a given downstream reservoirs
-[Network.Upstream.Distance, Network.Upstream.Path, Network.Upstream.Predecessors] = ...
- (arrayfun(@(fromnode) graphshortestpath(Dus,fromnode),FromN,'UniformOutput',false));
+[~, Network.Downstream.Distance, Network.Downstream.Path] = arrayfun(@(fromnode) shortestpathtree(Dig,fromnode,'OutputForm', 'cell'),FromN,'UniformOutput',false);
+[~, Network.Upstream.Distance, Network.Upstream.Path] = arrayfun(@(fromnode) shortestpathtree(Dig,'all',fromnode,'OutputForm', 'cell'),FromN,'UniformOutput',false);
+
+[~,~, Network.Downstream.Predecessors] = arrayfun(@(fromnode) shortestpathtree(Dig,fromnode,'OutputForm', 'vector'),FromN,'UniformOutput',false);
+[~,~, Network.Upstream.Predecessors] = arrayfun(@(fromnode) shortestpathtree(Dig,'all',fromnode,'OutputForm', 'vector'),FromN,'UniformOutput',false);
+
+%include reach A and reach B last node in path vector
+for n=FromN'  
+    for j=FromN'
+        
+        if Network.Downstream.Distance{n}(j)~=Inf
+            
+            Network.Downstream.Path{n}{j} ;
+            Network.Downstream.Path{n}{j} = [Network.Downstream.Path{n}{j}, j];
+            
+        end
+        
+        if Network.Upstream.Distance{n}(j)~=Inf
+            
+            Network.Upstream.Path{n}{j} ;
+            Network.Upstream.Path{n}{j} = [n, flip(Network.Upstream.Path{n}{j})];
+            
+        end
+    end
+    
+    Network.Downstream.Path{n} = Network.Downstream.Path{n}';
+    Network.Upstream.Path{n} = Network.Upstream.Path{n}';   
+end
 
 % Transfer downstream path from each each node into a matrix representation
 Network.II=cell2mat(Network.Downstream.Distance);
@@ -75,9 +97,8 @@ Network.Downstream.Node = cell(1,length(Network.NH));
 %closest node list
   for i=1:length(Network.NH)
       [sort_data,Network.Upstream.distancelist{i}] = sort(Network.Upstream.Distance{i, 1});
-      Network.Upstream.distancelist{i}( sort_data == inf ) = inf;
+      Network.Upstream.distancelist{i}( sort_data == inf ) = inf;     
   end
-
 
 end
 
