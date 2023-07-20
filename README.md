@@ -21,6 +21,7 @@ Refer to the user guide for more informations.
 
 ## References
 
+- Tangi, M., Schmitt, R. J.P., Bizzi, S. & Castelletti, A. (2019). The CASCADE toolbox for analyzing river sediment connectivity and management. Environmental Modelling & Software. [DOI: 119. 10.1016/j.envsoft.2019.07.008.](https://www.sciencedirect.com/science/article/pii/S1364815219303834?via%3Dihub).
 - Schmitt, R. J., Bizzi, S., & Castelletti, A. (2016). Tracking multiple sediment cascades at the river network scale identifies controls and emerging patterns of sediment connectivity. Water Resources Research, 52(5), 3941-3965. [DOI: 10.1002/2015WR018097](https://doi.org/10.1002/2015WR018097)
 - Schmitt, R. J., Bizzi, S., Castelletti, A., & Kondolf, G. M. (2018). Improved trade-offs of hydropower and sand connectivity by strategic dam planning in the Mekong. Nature Sustainability, 1(2), 96. [DOI: 10.1038/s41893-018-0022-3](https://doi.org/10.1038/s41893-018-0022-3)
 - Schmitt, R. J., Bizzi, S., Castelletti, A. F., & Kondolf, G. M. (2018). Stochastic modeling of sediment connectivity for reconstructing sand fluxes and origins in the unmonitored Se Kong, Se San, and Sre Pok tributaries of the Mekong River. Journal of Geophysical Research: Earth Surface, 123(1), 2-25. [DOI: 10.1002/2016JF004105](https://doi.org/10.1002/2016JF004105) 
