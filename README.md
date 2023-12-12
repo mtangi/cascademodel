@@ -1,8 +1,8 @@
 ## CASCADE toolbox : a framework for network-scale sediment connectivity assessment
 
-[CASCADE_toolbox](https://cascademodel.wordpress.com/) is an open source MATLAB™ toolbox for the application of the CASCADE model.
+[CASCADE_toolbox](http://cascade.deib.polimi.it/) is an open source MATLAB™ toolbox for the application of the CASCADE model.
 
-[CASCADE](https://cascademodel.wordpress.com/about-cascade/) (CAtchment Sediment Connectivity And DElivery) is a flexible modelling framework for the simulation of river sediment transport and connectivity. 
+[CASCADE](http://cascade.deib.polimi.it/about-cascade/) (CAtchment Sediment Connectivity And DElivery) is a flexible modelling framework for the simulation of river sediment transport and connectivity. 
 It also allows for the integration of dams and barriers as well as for consideration of external sediment contribution to the network. 
 
 Applications include impact assessment of dam portfolios, localization of dominant sources of sediment for downstream river reaches and visualization of basin-scale sediment connectivity under alternative sediment management strategies. 
