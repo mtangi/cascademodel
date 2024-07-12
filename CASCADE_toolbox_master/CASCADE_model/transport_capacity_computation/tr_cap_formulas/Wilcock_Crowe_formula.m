@@ -22,7 +22,7 @@ Fr_s = sum((psi > - 1) .* Fi_r_reach); % Fraction of sand in river bed (sand con
 %% Transport capacity from Wilcock-Crowe equations
 
 tau = (rho_w * g * h * Slope ); % bed shear stress [Kg m-1 s-1]
-tau_r50 = (0.021 + 0.0015 * exp( -20 * Fr_s ) ) * (rho_w * R * g * D50); % reference shear stress for the mean size of the bed surface sediment [Kg m-1 s-1]
+tau_r50 = (0.021 + 0.015 * exp( -20 * Fr_s ) ) * (rho_w * R * g * D50); % reference shear stress for the mean size of the bed surface sediment [Kg m-1 s-1]
 
 b = 0.67 ./ (1 + exp(1.5 - dmi./D50)); %hiding factor
 
