@@ -293,7 +293,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
                 Qbi_dep([id_sel;n],n,:) = zeros(size(Qbi_dep([id_sel; n],n,:)));
                 
                 % part_tr >0 means deposit
-                % The relative sub-cascade in the consiedered node is not
+                % The relative sub-cascade in the considered node is not
                 % activated, while all the other sub-cascades deposit
                 
                 if ~isempty(part_tr(part_tr>0))
@@ -338,7 +338,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
             
         end 
         
-        %chech if there is a dam on the To-Node of the reach
+        %check if there is a dam on the To-Node of the reach
         if isempty(damdata_class(damdata_class(:,1) == ReachData(n).ToN ,2:end))          
             trap_efficiency = zeros(1,length(psi));
         else
@@ -357,4 +357,5 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
     end
     
     
+
 end    
