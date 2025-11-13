@@ -192,7 +192,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
     sed_list = struct('name', { 'Boulders/cobbles' , 'Gravel' , 'Sand' , 'Silt/clay'}, ...
                        'boundary', { [-10 -6] , [-5.9999 -1 ] ,  [-0.9999 4 ] , [4.0001 10 ]});
     
-    %find which class in psi correspond to the one defined in sed_list 
+    %find which class in psi corresponds to the one defined in sed_list 
     
     for i=1:length(sed_list)
         sed_list(i).psi_class = find(and(psi>sed_list(i).boundary(1),psi<sed_list(i).boundary(2)));
@@ -304,12 +304,12 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
                     %the remaining sediment loads proceed downstream
                     Qbi_tr(id_sel,n,part_tr>0) = max(nansum(Qbi_tr(id_sel,Network.Upstream.Node{n},part_tr>0),2) -  Qbi_dep(id_sel,n,part_tr>0),0);
 
-                    %deposit the relative fraction of external sed.flow 
+                    %deposit the relative fraction of external sed. flow 
                     Qbi_external(part_tr>0) = Qbi_external(part_tr>0) - squeeze(Qbi_dep(n,n,part_tr>0))';
                    
                     %for the sed. classes that exceed the transport
                     %capacity, no new sub-cascade is created, except when
-                    %external sed.flows are present.
+                    %external sed. flows are present.
                     Qbi_tr(n,n,part_tr>0) = Qbi_external(part_tr>0) ;
                     
                 end
@@ -328,7 +328,7 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
  
                 end
                 
-            else %if there are no incoming sediment cascades, measure the trasport capacity of the reach and create a new cascade accordingly
+            else %if there are no incoming sediment cascades, measure the transport capacity of the reach and create a new cascade accordingly
                 
                 %choose the transport capacity equation to be used+                              
                 Qbi_tr(n,n,:) = tr_limit(n) .* tr_cap_junction( indx_tr_cap , indx_partition , Fi_r(n,:) , D50(n),Slope(n), Q(n), Wac(n),v(n) , h(n) );
@@ -359,3 +359,4 @@ function [ Qbi_tr , Qbi_dep, QB_tr, QB_dep , Fi_r , hydraulicData ] = CASCADE_mo
     
 
 end    
+
